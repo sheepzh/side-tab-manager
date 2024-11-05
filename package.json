@@ -1,0 +1,37 @@
+{
+    "name": "side-tab-manager",
+    "private": true,
+    "version": "0.0.1",
+    "homepage": "https://github.com/sheepzh/side-tab-manager",
+    "author": {
+        "name": "Victor Zhang",
+        "email": "returnzhy1996@outlook.com"
+    },
+    "scripts": {
+        "dev": "rspack serve --config build/rspack.dev.ts",
+        "build": "rspack build  --config build/rspack.prod.ts"
+    },
+    "dependencies": {
+        "@ant-design/icons": "^5.5.1",
+        "ahooks": "^3.8.1",
+        "antd": "^5.21.6",
+        "react": "^18.3.1",
+        "react-dnd": "^16.0.1",
+        "react-dnd-html5-backend": "^16.0.1",
+        "react-dom": "^18.3.1"
+    },
+    "devDependencies": {
+        "@rspack/cli": "^1.0.14",
+        "@rspack/core": "^1.0.14",
+        "@svgr/webpack": "^8.1.0",
+        "@types/archiver": "^6.0.3",
+        "@types/chrome": "^0.0.279",
+        "@types/node": "^22.8.4",
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "archiver": "^7.0.1",
+        "glob": "^11.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.6.3"
+    }
+}

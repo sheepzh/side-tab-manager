@@ -1,0 +1,1 @@
+export const GITHUB_PAGE = 'https://github.com/sheepzh/side-tab-manager'

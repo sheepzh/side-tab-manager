@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "lib": [
+            "DOM",
+            "ES2023",
+            "ES2023.Array",
+            "ES2023.Collection",
+        ],
+        "jsx": "react-jsx",
+        "target": "ES2023",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "useDefineForClassFields": true,
+        /* modules */
+        "module": "CommonJS",
+        "isolatedModules": true,
+        "resolveJsonModule": true,
+        "allowImportingTsExtensions": true,
+        /* type checking */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "paths": {
+            "@api/*": [
+                "src/api/*"
+            ],
+            "@util/*": [
+                "src/util/*"
+            ],
+            "@icon/*": [
+                "src/icon/*"
+            ],
+            "@manage/*": [
+                "src/pages/manage/*"
+            ]
+        }
+    }
+}
