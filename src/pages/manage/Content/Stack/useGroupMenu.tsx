@@ -149,7 +149,7 @@ export const useGroupMenu = (): {
                         selectable={false}
                         items={[{
                             key: "new-tab",
-                            label: "New tab in group",
+                            label: "New Tab in Group",
                             onClick: handleNewTab,
                         }, {
                             key: "ungroup",
@@ -157,7 +157,7 @@ export const useGroupMenu = (): {
                             onClick: handleUngroup,
                         }, {
                             key: "delete-group",
-                            label: "Delete group",
+                            label: "Delete Group",
                             onClick: handleDeleteGroup,
                             danger: true,
                         }]}
@@ -166,7 +166,7 @@ export const useGroupMenu = (): {
                         selectable={false}
                         items={[{
                             key: "new-tab",
-                            label: "New tab to the end",
+                            label: "New Tab",
                             onClick: handleNewTab,
                         }]}
                     />

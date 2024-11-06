@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import { filterGroups, filterTabs } from "./common"
 import { Group, Ungroup } from "./Group"
 import { useGroupMenu } from "./useGroupMenu"
+import "./Stack.css"
 
 type Props = {
     query?: string

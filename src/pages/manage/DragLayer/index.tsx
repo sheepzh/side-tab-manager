@@ -1,7 +1,7 @@
 import { GlobalToken, theme } from "antd"
 import { CSSProperties } from "react"
 import { useDragLayer, XYCoord } from "react-dnd"
-import { ItemType } from "../Content/Tab/useDnd"
+import { ItemType } from "../Content/Stack/useDnd"
 import Content from "./Content"
 import { useMyDragLayer } from "./context"
 import Tooltip from "./Tooltip"

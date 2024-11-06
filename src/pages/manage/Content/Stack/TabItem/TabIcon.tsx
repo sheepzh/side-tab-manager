@@ -29,7 +29,7 @@ const computeIconFromUrl = (url?: string) => {
     }
 }
 
-const ItemIcon = (props: ItemIconProps) => {
+const TabIcon = (props: ItemIconProps) => {
     const { iconUrl, url, children } = props
 
     const size = 20
@@ -47,4 +47,4 @@ const ItemIcon = (props: ItemIconProps) => {
         style={{ fontSize: `${size}px` }}
     />
 }
-export default ItemIcon
+export default TabIcon

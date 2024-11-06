@@ -7,6 +7,8 @@ export type TabSelectState = 'full' | 'none' | 'half'
 export type AppContextValue = {
     groups: TagGroupExtend[]
     ungroupedTabs: chrome.tabs.Tab[]
+    ungroupCollapsed: boolean
+    setUngroupCollapsed: (val: boolean) => void
     selectedTabIds: number[]
     selectedTabCount: number
     windowId: number
@@ -30,6 +32,7 @@ export const createAppContextValue = (option: { windowId: number }): AppContextV
     const { windowId } = option || {}
     const [selectedTabIds, setSelectedTabIds] = useState<number[]>([])
     const selectedTabCount = useMemo(() => selectedTabIds?.length ?? 0, [selectedTabIds])
+    const [ungroupCollapsed, setUngroupCollapsed] = useState(false)
 
     const selectTab = (tabId: number) => setSelectedTabIds([tabId, ...selectedTabIds || []])
     const unselectTab = (tabId: number) => setSelectedTabIds(selectedTabIds?.filter(selected => selected !== tabId) || [])
@@ -91,6 +94,8 @@ export const createAppContextValue = (option: { windowId: number }): AppContextV
     return {
         groups,
         ungroupedTabs,
+        ungroupCollapsed,
+        setUngroupCollapsed,
         windowId,
         selectedTabIds,
         selectedTabCount,

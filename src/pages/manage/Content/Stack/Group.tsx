@@ -8,7 +8,7 @@ import { Button, Flex, Input, InputRef, Tag, theme } from "antd"
 import Card from "antd/es/card/Card"
 import { useRef, useState } from "react"
 import { UngroupDragData } from "../../DragLayer/Content"
-import Item from "./Item"
+import TabItem from "./TabItem"
 import { cvtTagColor } from "./color"
 import { filterTabs } from "./common"
 import { ItemType, parseTabsFromItem, useMyDrag, useMyDrop } from "./useDnd"
@@ -125,7 +125,7 @@ export const Group = (props: Props) => {
                 className={clzNames('tab-group-container', collapsed && !forceOpen && 'collapsed')}
                 title={<Header value={value} />}
             >
-                {tabs.map(tab => <Item key={`tab-${tab?.id}`} value={tab} />)}
+                {tabs.map(tab => <TabItem key={`tab-${tab?.id}`} value={tab} />)}
             </Card>
         </div>
     )
@@ -227,10 +227,13 @@ export const Ungroup = (props: UngroupProps) => {
         tabs, forceOpen,
         onShowContextmenu,
     } = props
-    const [collapsed, setCollapsed] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const [query, setQuery] = useState<string>()
-    const { clearSelectedTab } = useAppContext()
+    const {
+        ungroupCollapsed: collapsed,
+        setUngroupCollapsed: setCollapsed,
+        clearSelectedTab,
+    } = useAppContext()
 
     useMount(() => {
         const rightClickListener = (ev: MouseEvent) => {
@@ -273,7 +276,7 @@ export const Ungroup = (props: UngroupProps) => {
                     onSearch={setQuery}
                 />}
             >
-                {filterTabs(tabs, query).map(tab => <Item key={`ungrouped-${tab.id}`} value={tab} />)}
+                {filterTabs(tabs, query).map(tab => <TabItem key={`ungrouped-${tab.id}`} value={tab} />)}
             </Card>
         </div>
     )

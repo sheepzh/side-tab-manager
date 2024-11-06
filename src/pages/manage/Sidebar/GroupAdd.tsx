@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { createNewGroup } from "@api/group"
 import NewGroup from "@icon/new-group.svg"
 import { useAppContext } from "@manage/context"
-import { ItemType, useMyDrop } from "../Content/Tab/useDnd"
+import { ItemType, useMyDrop } from "../Content/Stack/useDnd"
 import SideButton from "./SideButton"
 
 const GroupAdd = () => {
@@ -34,7 +34,7 @@ const GroupAdd = () => {
             btnRef={dropRef}
             canDrop={canDrop}
             disabled={!canDrop && selectedState === 'none'}
-            tooltip={`Add ${selectedTabCount} ${selectedTabCount > 1 ? 'tabs' : 'tab'} to new group`}
+            tooltip={`Add ${selectedTabCount} ${selectedTabCount > 1 ? 'Tabs' : 'Tab'} to New Group`}
             icon={<Icon component={NewGroup} />}
             onClick={handleClick}
         />

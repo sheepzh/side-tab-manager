@@ -3,15 +3,17 @@ import { moveGroup2Win, TagGroupExtend } from "@api/group"
 import { openSidePanel } from "@api/sidePanel"
 import { listTabByWindowId, moveTabs2Win, removeTab } from "@api/tab"
 import { createWindow } from "@api/window"
-import { Button } from "antd"
-import { ItemType, parseTabsFromItem, useMyDrop } from "../Tab/useDnd"
+import { Button, Tooltip } from "antd"
+import { CSSProperties } from "react"
+import { ItemType, parseTabsFromItem, useMyDrop } from "../../Stack/useDnd"
 
 type Props = {
     onWindowCreate?: (window: chrome.windows.Window) => void
+    style?: CSSProperties
 }
 
 const AddButton = (props: Props) => {
-    const { onWindowCreate } = props
+    const { onWindowCreate, style } = props
     const handleCreate = async () => {
         const window = await createWindow()
         await openSidePanel(window.id)
@@ -45,13 +47,16 @@ const AddButton = (props: Props) => {
     })
 
     return (
-        <Button
-            ref={dropRef}
-            className="window-add-button"
-            icon={<PlusOutlined />}
-            type={canDrop ? 'primary' : undefined}
-            onClick={handleCreate}
-        />
+        <Tooltip title="New Window" placement="bottom">
+            <Button
+                ref={dropRef}
+                className="window-add-button"
+                icon={<PlusOutlined />}
+                type={canDrop ? 'primary' : undefined}
+                onClick={handleCreate}
+                style={style}
+            />
+        </Tooltip>
     )
 }
 

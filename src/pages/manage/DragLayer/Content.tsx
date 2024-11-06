@@ -3,9 +3,9 @@ import { TagGroupExtend } from "@api/group"
 import { GlobalToken, theme } from "antd"
 import { CSSProperties } from "react"
 import { XYCoord } from "react-dnd"
-import { GroupTag } from "../Content/Tab/Group"
-import ItemIcon from "../Content/Tab/ItemIcon"
-import { ItemType } from "../Content/Tab/useDnd"
+import { GroupTag } from "../Content/Stack/Group"
+import TabIcon from "../Content/Stack/TabItem/TabIcon"
+import { ItemType } from "../Content/Stack/useDnd"
 
 export type UngroupDragData = {
     tabs: chrome.tabs.Tab[]
@@ -41,7 +41,7 @@ const Content = ({ type, value }: Props) => {
         return (
             <div style={outerStyle(token)}>
                 {isOnly
-                    ? <ItemIcon iconUrl={favIconUrl} url={url} />
+                    ? <TabIcon iconUrl={favIconUrl} url={url} />
                     : <EmojiIcon children="✅" />}
                 <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {isOnly ? title : `Total ${tabs.length} selected tabs`}
