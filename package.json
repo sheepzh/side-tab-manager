@@ -1,7 +1,7 @@
 {
     "name": "side-tab-manager",
     "private": true,
-    "version": "0.0.1",
+    "version": "0.0.2",
     "homepage": "https://github.com/sheepzh/side-tab-manager",
     "author": {
         "name": "Victor Zhang",
