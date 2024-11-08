@@ -25,7 +25,6 @@ const _default: chrome.runtime.ManifestV3 = {
         'tabs',
         'tabGroups',
         'sidePanel',
-        'search',
     ],
     action: {
         default_icon: "public/icon.png",

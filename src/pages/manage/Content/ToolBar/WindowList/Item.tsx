@@ -9,7 +9,7 @@ import { useAppContext } from "@manage/context"
 import { IS_CHROME, IS_EDGE } from "@util/env"
 import { useRequest } from "ahooks"
 import { Button, message } from "antd"
-import { ItemType, parseTabsFromItem, useMyDrop } from "../Tab/useDnd"
+import { ItemType, parseTabsFromItem, useMyDrop } from "../../Stack/useDnd"
 
 type Props = {
     id?: number

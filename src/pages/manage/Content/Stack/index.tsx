@@ -1,11 +1,26 @@
 import { useAppContext } from "@manage/context"
-import { useMemo } from "react"
+import { CSSProperties, useMemo } from "react"
 import { filterGroups, filterTabs } from "./common"
 import { Group, Ungroup } from "./Group"
 import { useGroupMenu } from "./useGroupMenu"
+import "./Stack.css"
+import { Flex } from "antd"
 
 type Props = {
     query?: string
+}
+
+const OUTER_STYLE: CSSProperties = {
+    flex: 1,
+    marginTop: 5,
+    height: 0
+}
+
+const INNER_STYLE: CSSProperties = {
+    height: '100%',
+    overflowY: 'overlay' as CSSProperties['overflowY'],
+    overlay: 'auto',
+    scrollbarGutter: 'stable',
 }
 
 const Stack = (props: Props) => {
@@ -18,20 +33,20 @@ const Stack = (props: Props) => {
     const { el, showContextMenu } = useGroupMenu()
 
     return (
-        <div className="tab-stack">
-            <div className="tab-stack-inner">
+        <div style={OUTER_STYLE}>
+            <Flex vertical gap={8} style={INNER_STYLE}>
                 {filteredGroups?.map(g => <Group
                     key={`group-${g.id}-${g.title}`}
                     value={g}
                     forceOpen={!!query}
                     onShowContextmenu={ev => showContextMenu?.(ev, g)}
                 />)}
-                {!!filteredUngroupedTabs?.length && <Ungroup
+                <Ungroup
                     tabs={filteredUngroupedTabs}
                     forceOpen={!!query}
                     onShowContextmenu={ev => showContextMenu?.(ev)}
-                />}
-            </div>
+                />
+            </Flex>
             {el}
         </div>
     )

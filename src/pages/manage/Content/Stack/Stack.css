@@ -1,18 +1,3 @@
-.tab-stack {
-    margin-top: 5px;
-    flex: 1;
-    height: 0;
-}
-
-.tab-stack-inner {
-    height: 100%;
-    overflow-y: overlay;
-    scrollbar-gutter: stable;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
 .tab-group-container .ant-card-head {
     padding: 0px;
     padding-inline-start: 7px;
@@ -68,11 +53,6 @@
     margin: 6px 0;
 }
 
-.tab-group-context-container .ant-menu-item {
-    padding-inline: 10px;
-    height: 32px;
-}
-
 .tab-group-context-container .ant-menu-title-content {
     display: flex;
     height: 32px;
@@ -103,27 +83,8 @@
     height: 18px;
 }
 
-.tab-item-container {
-    width: 100%;
-    height: 32px;
-    display: flex;
-    padding: 0 4px;
-    box-sizing: border-box;
-}
-
-.tab-item-left {
-    display: flex;
-    gap: 5px;
-    flex: 1;
-}
-
-.tab-item-title {
-    display: flex;
-    flex: 1;
-    gap: 5px;
-    align-items: center;
-    border-radius: 5px;
-    padding: 0 4px;
+.tab-item-container:hover .only-hover {
+    opacity: 1 !important;
 }
 
 .tab-item-title:hover {

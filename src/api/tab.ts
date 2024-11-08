@@ -13,9 +13,10 @@ export async function listTabByWindowId(windowId: number | undefined): Promise<c
     return chrome.tabs.query({ windowId })
 }
 
-export async function removeTab(id: number | undefined): Promise<void> {
+export async function removeTab(id: number | undefined | number[]): Promise<void> {
     if (id === undefined) return
-    return chrome.tabs.remove(id)
+    const tabIds = Array.isArray(id) ? id : [id]
+    return chrome.tabs.remove(tabIds)
 }
 
 export async function focusTab(id: number): Promise<void> {

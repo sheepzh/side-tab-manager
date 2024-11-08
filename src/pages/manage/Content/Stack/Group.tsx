@@ -6,9 +6,9 @@ import { clzNames } from "@util/style"
 import { useMount, useThrottleFn } from "ahooks"
 import { Button, Flex, Input, InputRef, Tag, theme } from "antd"
 import Card from "antd/es/card/Card"
-import { useRef, useState } from "react"
+import { CSSProperties, useMemo, useRef, useState } from "react"
 import { UngroupDragData } from "../../DragLayer/Content"
-import Item from "./Item"
+import TabItem from "./TabItem"
 import { cvtTagColor } from "./color"
 import { filterTabs } from "./common"
 import { ItemType, parseTabsFromItem, useMyDrag, useMyDrop } from "./useDnd"
@@ -96,9 +96,13 @@ export const Group = (props: Props) => {
         drop(item, monitor) {
             const itemType = monitor.getItemType() as ItemType
             const tabs = parseTabsFromItem(item, itemType)
+            const thisGroupId = value?.id
+            const allFromThisGroup = !tabs?.find(t => t.groupId !== thisGroupId)
+            if (allFromThisGroup) return
+
             const tabIds = tabs?.filter(t => t.groupId !== value?.id)?.map(t => t.id)
-            moveTabs2Group(tabIds, value?.id)
-            clearSelectedTab()
+            moveTabs2Group(tabIds, thisGroupId)
+            clearSelectedTab('MoveToGroup')
         }
     })
 
@@ -125,7 +129,7 @@ export const Group = (props: Props) => {
                 className={clzNames('tab-group-container', collapsed && !forceOpen && 'collapsed')}
                 title={<Header value={value} />}
             >
-                {tabs.map(tab => <Item key={`tab-${tab?.id}`} value={tab} />)}
+                {tabs.map(tab => <TabItem key={`tab-${tab?.id}`} value={tab} />)}
             </Card>
         </div>
     )
@@ -184,7 +188,6 @@ const UngroupHeader = ({ tabs, onClick, onSearch }: {
                         ref={searchRef}
                         size="small"
                         style={{ flex: 1 }}
-                        allowClear
                         onChange={ev => handleSearchChange?.(ev.currentTarget?.value)}
                         prefix={<SearchOutlined />}
                         onKeyDown={ev => ev.key == 'Escape' && closeSearch()}
@@ -227,10 +230,13 @@ export const Ungroup = (props: UngroupProps) => {
         tabs, forceOpen,
         onShowContextmenu,
     } = props
-    const [collapsed, setCollapsed] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const [query, setQuery] = useState<string>()
-    const { clearSelectedTab } = useAppContext()
+    const {
+        ungroupCollapsed: collapsed,
+        setUngroupCollapsed: setCollapsed,
+        clearSelectedTab,
+    } = useAppContext()
 
     useMount(() => {
         const rightClickListener = (ev: MouseEvent) => {
@@ -246,7 +252,7 @@ export const Ungroup = (props: UngroupProps) => {
         return () => window.removeEventListener('contextmenu', rightClickListener)
     })
 
-    const [, dropRef] = useMyDrop({
+    const [{ canDrop }, dropRef] = useMyDrop({
         accept: ['tab', 'grouped'],
         drop(item, monitor) {
             const type = monitor.getItemType() as ItemType
@@ -255,25 +261,37 @@ export const Ungroup = (props: UngroupProps) => {
                 ?.filter(t => t.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE)
                 ?.map(t => t.id)
             ungroupTabs(tabIds)
-            clearSelectedTab()
+            clearSelectedTab('MoveToUngroup')
         },
+        collect: monitor => ({ canDrop: monitor.canDrop() })
     })
+
+    const [display, realCollapsed] = useMemo(() => {
+        let display: CSSProperties['display'] = undefined
+        let realCollapsed: boolean = collapsed && !forceOpen
+        if (!tabs.length) {
+            // No tabs and not dropping, hide
+            if (!canDrop) display = 'none'
+            realCollapsed = true
+        }
+        return [display, realCollapsed]
+    }, [collapsed, forceOpen, tabs, canDrop])
 
     const revertCollapsed = () => setCollapsed(!collapsed)
 
     return (
-        <div ref={ref}>
+        <div ref={ref} style={{ display }}>
             <Card
                 ref={dropRef}
                 size="small"
-                className={clzNames('tab-group-container', collapsed && !forceOpen && 'collapsed')}
+                className={clzNames('tab-group-container', realCollapsed && 'collapsed')}
                 title={<UngroupHeader
                     tabs={tabs}
                     onClick={revertCollapsed}
                     onSearch={setQuery}
                 />}
             >
-                {filterTabs(tabs, query).map(tab => <Item key={`ungrouped-${tab.id}`} value={tab} />)}
+                {filterTabs(tabs, query).map(tab => <TabItem key={`ungrouped-${tab.id}`} value={tab} />)}
             </Card>
         </div>
     )

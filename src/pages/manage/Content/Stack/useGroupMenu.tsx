@@ -1,13 +1,19 @@
 import Icon from "@ant-design/icons"
+import type { IconComponentProps } from "@ant-design/icons/lib/components/Icon"
 import { removeGroup, TagGroupExtend, ungroup, updateGroupColor, updateGroupTitle } from "@api/group"
 import { createTab, createTabOfGroup } from "@api/tab"
 import ColorSelected from "@icon/color-selected.svg"
+import Delete from "@icon/delete.svg"
+import MoveGroup from "@icon/move-group.svg"
+import NewTab from "@icon/new-tab.svg"
+import Ungroup from "@icon/ungroup.svg"
 import { useAppContext } from "@manage/context"
 import { clzNames } from "@util/style"
 import { useMount } from "ahooks"
-import { Divider, Input, Menu, Modal, theme } from "antd"
+import { Divider, Flex, Input, Menu, Modal, theme } from "antd"
+import { MenuItemType } from "antd/es/menu/interface"
 import { GlobalToken } from "antd/lib"
-import React, { CSSProperties, useRef, useState } from "react"
+import React, { CSSProperties, useMemo, useRef, useState } from "react"
 import { cvtColor } from "./color"
 
 export type GroupHandler = (target?: TagGroupExtend) => void
@@ -56,11 +62,26 @@ const ColorSelect = (props: ColorSelectProps) => {
     )
 }
 
+const MenuItemLabel = (props: { title: string, component: IconComponentProps['component'] }) => {
+    const { title, component } = props
+    return (
+        <Flex>
+            <Icon component={component} />
+            <span style={{ marginInlineStart: 5 }}>{title}</span>
+        </Flex>
+    )
+}
+
+const ITEM_STYLE: CSSProperties = {
+    paddingInline: 8,
+    height: 32,
+}
+
 export const useGroupMenu = (): {
     el: React.JSX.Element,
     showContextMenu: (ev: MouseEvent, value?: TagGroupExtend) => void,
 } => {
-    const { windowId } = useAppContext()
+    const { windowId, ungroupedTabs } = useAppContext()
     const [position, setPosition] = useState<[number, number]>()
     const [width, setWidth] = useState<number>(0)
     const [value, setValue] = useState<TagGroupExtend>()
@@ -113,7 +134,7 @@ export const useGroupMenu = (): {
         setTimeout(() => locked.current = true)
         Modal.confirm({
             title: "Delete the group",
-            content: "All the tabs under this group will be removed!",
+            content: "All the tabs under this group will be closed!",
             onOk: () => {
                 removeGroup(groupId)
                 closeContextMenu()
@@ -128,6 +149,35 @@ export const useGroupMenu = (): {
         updateGroupColor(value.id, color)
         value.color = color
     }
+
+    const canMove2NewWin = useMemo(() => !!ungroupedTabs?.length, [ungroupedTabs])
+
+    const items = useMemo(() => {
+        const res: MenuItemType[] = [{
+            key: "new-tab",
+            label: <MenuItemLabel title="New Tab in Group" component={NewTab} />,
+            onClick: handleNewTab,
+            style: ITEM_STYLE,
+        }, {
+            key: "ungroup",
+            label: <MenuItemLabel title="Ungroup" component={Ungroup} />,
+            onClick: handleUngroup,
+            style: ITEM_STYLE,
+        }, {
+            key: "delete-group",
+            label: <MenuItemLabel title="Delete Group" component={Delete} />,
+            onClick: handleDeleteGroup,
+            style: ITEM_STYLE,
+            danger: true,
+        }]
+        canMove2NewWin && res.splice(1, 0, {
+            key: 'move-to-new-win',
+            label: <MenuItemLabel title="Move Group to New Window" component={MoveGroup} />,
+            onClick: handleDeleteGroup,
+            style: ITEM_STYLE,
+        })
+        return res
+    }, [canMove2NewWin])
 
     return {
         el: (
@@ -147,27 +197,16 @@ export const useGroupMenu = (): {
                     <Divider />
                     <Menu
                         selectable={false}
-                        items={[{
-                            key: "new-tab",
-                            label: "New tab in group",
-                            onClick: handleNewTab,
-                        }, {
-                            key: "ungroup",
-                            label: "Ungroup",
-                            onClick: handleUngroup,
-                        }, {
-                            key: "delete-group",
-                            label: "Delete group",
-                            onClick: handleDeleteGroup,
-                            danger: true,
-                        }]}
-                    /></> : <>
+                        items={items}
+                    />
+                </> : <>
                     <Menu
                         selectable={false}
                         items={[{
                             key: "new-tab",
-                            label: "New tab to the end",
+                            label: <MenuItemLabel title="New Tab" component={NewTab} />,
                             onClick: handleNewTab,
+                            style: ITEM_STYLE,
                         }]}
                     />
                 </>}

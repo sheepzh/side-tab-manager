@@ -2,8 +2,8 @@ import { theme } from 'antd'
 import { useState } from 'react'
 import './Content.css'
 import Header from './Header'
-import Tab from './Tab'
-import Window from './Window'
+import Stack from './Stack'
+import ToolBar from './ToolBar'
 
 const Content = () => {
     const [query, setQuery] = useState<string>()
@@ -15,8 +15,8 @@ const Content = () => {
             style={{ backgroundColor: token.colorSuccessBgHover }}
         >
             <Header onSearch={setQuery} />
-            <Window.List />
-            <Tab.Stack query={query} />
+            <ToolBar />
+            <Stack query={query} />
         </div>
     )
 }

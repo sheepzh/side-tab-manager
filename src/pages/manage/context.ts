@@ -7,6 +7,8 @@ export type TabSelectState = 'full' | 'none' | 'half'
 export type AppContextValue = {
     groups: TagGroupExtend[]
     ungroupedTabs: chrome.tabs.Tab[]
+    ungroupCollapsed: boolean
+    setUngroupCollapsed: (val: boolean) => void
     selectedTabIds: number[]
     selectedTabCount: number
     windowId: number
@@ -15,7 +17,8 @@ export type AppContextValue = {
     selectTab: (tabId: number) => void
     unselectTab: (tabId: number) => void
     getSelectedTabs: () => chrome.tabs.Tab[]
-    clearSelectedTab: () => void
+    clearSelectedTab: (reason: string) => void
+    setSelectedTabIds: (tabIds: number[]) => void
     selectAllTab: () => void
     refreshGroups: () => void
 }
@@ -30,10 +33,14 @@ export const createAppContextValue = (option: { windowId: number }): AppContextV
     const { windowId } = option || {}
     const [selectedTabIds, setSelectedTabIds] = useState<number[]>([])
     const selectedTabCount = useMemo(() => selectedTabIds?.length ?? 0, [selectedTabIds])
+    const [ungroupCollapsed, setUngroupCollapsed] = useState(false)
 
     const selectTab = (tabId: number) => setSelectedTabIds([tabId, ...selectedTabIds || []])
     const unselectTab = (tabId: number) => setSelectedTabIds(selectedTabIds?.filter(selected => selected !== tabId) || [])
-    const clearSelectedTab = () => setSelectedTabIds([])
+    const clearSelectedTab = (reason: string) => {
+        setSelectedTabIds([])
+        console.log(`Cleared all tabs: reason=${reason}`)
+    }
     const selectAllTab = () => {
         const allIds: number[] = []
         Object.values(tabMap).map(t => t.id).forEach(id => id && allIds.push(id))
@@ -91,12 +98,14 @@ export const createAppContextValue = (option: { windowId: number }): AppContextV
     return {
         groups,
         ungroupedTabs,
+        ungroupCollapsed,
+        setUngroupCollapsed,
         windowId,
         selectedTabIds,
         selectedTabCount,
         selectedState,
         refreshGroups,
-        selectTab, unselectTab, clearSelectedTab, selectAllTab,
-        getTabs, getSelectedTabs,
+        selectTab, unselectTab, clearSelectedTab, setSelectedTabIds,
+        selectAllTab, getTabs, getSelectedTabs,
     }
 }

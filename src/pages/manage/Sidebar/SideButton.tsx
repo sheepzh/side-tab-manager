@@ -22,11 +22,13 @@ const SideButton = (props: Props) => {
         <Button
             ref={btnRef}
             shape="circle"
+            size="small"
             type={canDrop ? 'primary' : 'text'}
             style={{ padding: 10, ...style }}
             {...buttonProps}
         />
     )
+
     if (canDrop) {
         return btnRender()
     }

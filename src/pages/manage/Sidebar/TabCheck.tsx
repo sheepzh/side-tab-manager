@@ -22,7 +22,7 @@ const TabCheck = () => {
     const { selectedState, selectedTabIds, clearSelectedTab, selectAllTab } = useAppContext()
     const handleClick = () => {
         if (selectedState !== 'none') {
-            clearSelectedTab()
+            clearSelectedTab('TabCheckClear')
         } else {
             selectAllTab()
         }
