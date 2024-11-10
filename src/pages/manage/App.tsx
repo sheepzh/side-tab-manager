@@ -1,3 +1,4 @@
+import { Flex } from 'antd'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import './App.css'
@@ -14,13 +15,17 @@ const App = ({ windowId }: { windowId: number }) => {
     return (
         <AppContext.Provider value={app}>
             <DndProvider backend={HTML5Backend}>
-                <div className="app">
+                <Flex style={{
+                    height: '100vh',
+                    width: '100vw',
+                    overflow: 'hidden',
+                }}>
                     <DragLayerContext.Provider value={dragLayer}>
                         <Content />
                         <Sidebar />
                         <DragLayer />
                     </DragLayerContext.Provider>
-                </div>
+                </Flex>
             </DndProvider>
         </AppContext.Provider>
     )

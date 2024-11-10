@@ -1,7 +1,6 @@
-import { theme } from 'antd'
+import { Flex, theme } from 'antd'
 import { useState } from 'react'
-import './Content.css'
-import Header from './Header'
+import Search from './Search'
 import Stack from './Stack'
 import ToolBar from './ToolBar'
 
@@ -10,14 +9,21 @@ const Content = () => {
     const { token } = theme.useToken()
 
     return (
-        <div
-            className="app-content"
-            style={{ backgroundColor: token.colorSuccessBgHover }}
+        <Flex
+            vertical
+            flex={1}
+            style={{
+                padding: 10,
+                paddingInlineEnd: 5,
+                width: 0,
+                userSelect: 'none',
+                backgroundColor: token.colorSuccessBgHover,
+            }}
         >
-            <Header onSearch={setQuery} />
+            <Search onSearch={setQuery} />
             <ToolBar />
             <Stack query={query} />
-        </div>
+        </Flex>
     )
 }
 

@@ -1,9 +1,9 @@
 
 import { TagGroupExtend } from "@api/group"
+import GroupTag from "@manage/Content/Stack/Card/GroupTag"
 import { GlobalToken, theme } from "antd"
 import { CSSProperties } from "react"
 import { XYCoord } from "react-dnd"
-import { GroupTag } from "../Content/Stack/Group"
 import TabIcon from "../Content/Stack/TabItem/TabIcon"
 import { ItemType } from "../Content/Stack/useDnd"
 

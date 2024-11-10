@@ -1,8 +1,7 @@
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import { useThrottleEffect } from 'ahooks'
-import { Input } from 'antd'
+import { Flex, Input } from 'antd'
 import { useState } from 'react'
-import "./Header.css"
 
 type Props = {
     onSearch?: (val: string) => void
@@ -19,7 +18,7 @@ const Search = (props: Props) => {
     }
 
     return (
-        <div className='header-container'>
+        <Flex style={{ paddingInlineEnd: 8 }}>
             <Input
                 allowClear
                 value={value}
@@ -32,7 +31,7 @@ const Search = (props: Props) => {
                     </div>
                 )}
             />
-        </div>
+        </Flex>
     )
 }
 

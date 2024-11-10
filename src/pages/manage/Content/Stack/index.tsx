@@ -1,10 +1,10 @@
 import { useAppContext } from "@manage/context"
-import { CSSProperties, useMemo } from "react"
-import { filterGroups, filterTabs } from "./common"
-import { Group, Ungroup } from "./Group"
-import { useGroupMenu } from "./useGroupMenu"
-import "./Stack.css"
 import { Flex } from "antd"
+import { CSSProperties, useMemo } from "react"
+import Group from "./Card/Group"
+import Ungroup from "./Card/Ungroup"
+import { filterGroups, filterTabs } from "./common"
+import { useGroupMenu } from "./useGroupMenu"
 
 type Props = {
     query?: string

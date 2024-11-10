@@ -8,30 +8,26 @@ import MoveGroup from "@icon/move-group.svg"
 import NewTab from "@icon/new-tab.svg"
 import Ungroup from "@icon/ungroup.svg"
 import { useAppContext } from "@manage/context"
-import { clzNames } from "@util/style"
 import { useMount } from "ahooks"
 import { Divider, Flex, Input, Menu, Modal, theme } from "antd"
 import { MenuItemType } from "antd/es/menu/interface"
-import { GlobalToken } from "antd/lib"
 import React, { CSSProperties, useMemo, useRef, useState } from "react"
 import { cvtColor } from "./color"
 
 export type GroupHandler = (target?: TagGroupExtend) => void
 
-const computeStyle = (position: [number, number] | undefined, width: number, token: GlobalToken): CSSProperties => {
+const computePositionStyle = (position: [number, number] | undefined, width: number): CSSProperties => {
     const [x = 0, y = 0] = position || []
     const left = Math.min(document.body.getBoundingClientRect().width - width - 10, x)
-    const { colorBgElevated, borderRadiusLG, colorText, zIndexPopupBase, boxShadowSecondary } = token || {}
     return {
         width,
         left,
         top: y + 5,
-        backgroundColor: colorBgElevated,
-        borderRadius: borderRadiusLG,
-        zIndex: zIndexPopupBase + 50,
-        color: colorText,
-        boxShadow: boxShadowSecondary,
     }
+}
+
+const DIVIDER_STYLE: CSSProperties = {
+    margin: '6px 0',
 }
 
 type ColorSelectProps = {
@@ -45,20 +41,37 @@ const ALL_COLORS: chrome.tabGroups.ColorEnum[] = [
 
 const ColorSelect = (props: ColorSelectProps) => {
     const { value, onChange } = props
+    const { token } = theme.useToken()
 
     return (
-        <div className="color-select">
+        <Flex
+            justify="space-between"
+            style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: 6,
+                cursor: 'pointer',
+            }}
+        >
             {ALL_COLORS.map(color => (
-                <div
+                <Flex
                     key={`color-item-${color}`}
-                    className="color-select-item"
-                    style={{ backgroundColor: cvtColor(color) }}
+                    justify="space-around"
+                    align="center"
+                    style={{
+                        width: 18,
+                        height: 18,
+                        borderRadius: '50%',
+                        color: token.colorWhite,
+                        backgroundColor: cvtColor(color),
+                    }}
                     onClick={() => onChange?.(color)}
                 >
-                    {color === value && <Icon component={ColorSelected} />}
-                </div>
+                    {/* make content not empty */}
+                    {color === value ? <Icon component={ColorSelected} style={{ fontSize: 18 }} /> : <div />}
+                </Flex>
             ))}
-        </div>
+        </Flex>
     )
 }
 
@@ -73,6 +86,7 @@ const MenuItemLabel = (props: { title: string, component: IconComponentProps['co
 }
 
 const ITEM_STYLE: CSSProperties = {
+    display: 'flex',
     paddingInline: 8,
     height: 32,
 }
@@ -182,9 +196,21 @@ export const useGroupMenu = (): {
     return {
         el: (
             <div
-                className={clzNames("tab-group-context-container", visible && "visible")}
-                style={computeStyle(position, width, token)}
                 ref={ref}
+                style={visible ?
+                    {
+                        backgroundColor: token.colorBgElevated,
+                        borderRadius: token.borderRadiusLG,
+                        zIndex: token.zIndexPopupBase + 50,
+                        color: token.colorText,
+                        boxShadow: token.boxShadowSecondary,
+                        position: 'fixed',
+                        backgroundClip: 'padding-box',
+                        padding: 6,
+                        display: 'block',
+                        ...computePositionStyle(position, width),
+                    } : { display: 'none' }
+                }
             >
                 {value ? <>
                     <Input
@@ -192,9 +218,9 @@ export const useGroupMenu = (): {
                         onInput={ev => handleTitleInput(ev.currentTarget.value)}
                         onKeyDown={ev => ev.code === 'Enter' && closeContextMenu()}
                     />
-                    <Divider />
+                    <Divider style={DIVIDER_STYLE} />
                     <ColorSelect value={value?.color} onChange={handleColorChange} />
-                    <Divider />
+                    <Divider style={DIVIDER_STYLE} />
                     <Menu
                         selectable={false}
                         items={items}

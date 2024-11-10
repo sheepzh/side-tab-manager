@@ -49,7 +49,6 @@ const AddButton = (props: Props) => {
     const btn = (
         <Button
             ref={dropRef}
-            className="window-add-button"
             icon={<PlusOutlined />}
             type={canDrop ? 'primary' : undefined}
             onClick={handleCreate}
