@@ -10,7 +10,6 @@ import Ungroup from "@icon/ungroup.svg"
 import { useAppContext } from "@manage/context"
 import { useMount } from "ahooks"
 import { Divider, Flex, Input, Menu, Modal, theme } from "antd"
-import { MenuItemType } from "antd/es/menu/interface"
 import React, { CSSProperties, useMemo, useRef, useState } from "react"
 import { cvtColor } from "./color"
 
@@ -166,33 +165,6 @@ export const useGroupMenu = (): {
 
     const canMove2NewWin = useMemo(() => !!ungroupedTabs?.length, [ungroupedTabs])
 
-    const items = useMemo(() => {
-        const res: MenuItemType[] = [{
-            key: "new-tab",
-            label: <MenuItemLabel title="New Tab in Group" component={NewTab} />,
-            onClick: handleNewTab,
-            style: ITEM_STYLE,
-        }, {
-            key: "ungroup",
-            label: <MenuItemLabel title="Ungroup" component={Ungroup} />,
-            onClick: handleUngroup,
-            style: ITEM_STYLE,
-        }, {
-            key: "delete-group",
-            label: <MenuItemLabel title="Delete Group" component={Delete} />,
-            onClick: handleDeleteGroup,
-            style: ITEM_STYLE,
-            danger: true,
-        }]
-        canMove2NewWin && res.splice(1, 0, {
-            key: 'move-to-new-win',
-            label: <MenuItemLabel title="Move Group to New Window" component={MoveGroup} />,
-            onClick: handleDeleteGroup,
-            style: ITEM_STYLE,
-        })
-        return res
-    }, [canMove2NewWin])
-
     return {
         el: (
             <div
@@ -223,7 +195,28 @@ export const useGroupMenu = (): {
                     <Divider style={DIVIDER_STYLE} />
                     <Menu
                         selectable={false}
-                        items={items}
+                        items={[{
+                            key: "new-tab",
+                            label: <MenuItemLabel title="New Tab in Group" component={NewTab} />,
+                            onClick: handleNewTab,
+                            style: ITEM_STYLE,
+                        }, canMove2NewWin ? {
+                            key: 'move-to-new-win',
+                            label: <MenuItemLabel title="Move Group to New Window" component={MoveGroup} />,
+                            onClick: handleDeleteGroup,
+                            style: ITEM_STYLE,
+                        } : null, {
+                            key: "ungroup",
+                            label: <MenuItemLabel title="Ungroup" component={Ungroup} />,
+                            onClick: handleUngroup,
+                            style: ITEM_STYLE,
+                        }, {
+                            key: "delete-group",
+                            label: <MenuItemLabel title="Delete Group" component={Delete} />,
+                            onClick: handleDeleteGroup,
+                            style: ITEM_STYLE,
+                            danger: true,
+                        }]}
                     />
                 </> : <>
                     <Menu
